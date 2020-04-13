@@ -5,10 +5,12 @@ services:
     ports:
       - "2181:2181"
   kafka:
-    build: .
+    image: wurstmeister/kafka
     ports:
-      - "9092"
+      - "9092:9092"
+    
     environment:
+      KAFKA_CREATE_TOPICS: "reddit-posts:3:1,reddit-comments:3:1:compact"
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
