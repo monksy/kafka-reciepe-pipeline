@@ -1,9 +1,16 @@
 version: '2'
+
+volumes:
+  kafkastore:
+     external: true
+     
 services:
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
   kafka:
     image: wurstmeister/kafka
     ports:
@@ -11,7 +18,10 @@ services:
     
     environment:
       KAFKA_CREATE_TOPICS: "reddit-posts:3:1,reddit-comments:3:1:compact"
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.1.244
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_DIRS: /kafka/kafka-logs
+      KAFKA_BROKER_ID: 1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - kafkastore:/kafka/kafka-logs
